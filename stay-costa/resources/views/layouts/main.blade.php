@@ -19,8 +19,8 @@
             <nav class="text-base font-semibold space-x-6 text-gray-600">
                 <a href="/" class="hover:text-gray-900 hover:underline">Inicio</a>
                 <a href="#" class="hover:text-gray-900 hover:underline">Propiedades</a>
-                <a href="#" class="hover:text-gray-900 hover:underline">Nosotros</a>
-                <a href="#" class="hover:text-gray-900 hover:underline">Contacto</a>
+                <a href="/nosotros" class="hover:text-gray-900 hover:underline">Nosotros</a>
+                <a href="contacto" class="hover:text-gray-900 hover:underline">Contacto</a>
             </nav>
         </div>
     </header>
