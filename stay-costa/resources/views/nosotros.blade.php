@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Sobre nosotros - Stay Costa')
+@section('title', 'Sobre Nosotros - Stay Costa')
 
 @section('content')
     <div class="bg-white p-8 rounded-lg shadow-md">
