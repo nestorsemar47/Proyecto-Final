@@ -10,6 +10,7 @@ class Reserva extends Model
 
     protected $fillable = [
         'propiedad_id',
+        'user_id',
         'nombre_cliente',
         'email_cliente',
         'fecha_inicio',
@@ -23,5 +24,10 @@ class Reserva extends Model
     public function propiedad()
     {
         return $this->belongsTo(Propiedades::class, 'propiedad_id');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

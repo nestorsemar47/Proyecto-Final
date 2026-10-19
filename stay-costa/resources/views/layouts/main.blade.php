@@ -12,7 +12,7 @@
     
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wide text-gray-800">Stay Costa</h1>
+            <a href="/"><h1 class="text-2xl font-bold tracking-wide text-gray-800">Stay Costa</h1></a>
             
             <nav class="text-base font-semibold space-x-6 text-gray-600">
                 <a href="/" class="hover:text-gray-900 hover:underline">Inicio</a>

@@ -6,11 +6,17 @@ use App\Models\Propiedades;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ReservaController extends Controller
 {
     public function store(Request $request)
     {
+        if (!Auth::check()){
+            return redirect()->route('login')
+            ->with('error', 'Debes iniciar sesión para poder realizar una reserva.');
+        }
+    
         $request->validate([
             'propiedad_id' => 'required|exists:propiedades,id',
             'nombre_cliente' => 'required|string|max:255',
@@ -31,6 +37,7 @@ class ReservaController extends Controller
 
         Reserva::create([
             'propiedad_id' => $request->propiedad_id,
+            'user_id' => Auth::id(),
             'nombre_cliente' => $request->nombre_cliente,
             'email_cliente' => $request->email_cliente,
             'fecha_inicio' => $request->fecha_inicio,
