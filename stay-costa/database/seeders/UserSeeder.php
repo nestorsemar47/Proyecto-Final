@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Usuario con rol Administrador
         User::create([
             'name'     => 'Administrador Stay Costa',
             'email'    => 'admin@gmail.com',
@@ -18,7 +17,6 @@ class UserSeeder extends Seeder
             'rol'      => 'administrador',
         ]);
 
-        // 2. Usuario con rol Cliente
         User::create([
             'name'     => 'Néstor Martínez',
             'email'    => 'nestor@gmail.com',
