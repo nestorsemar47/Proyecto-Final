@@ -29,10 +29,16 @@
                 @endguest
 
                 @auth
+                    @if (Auth::user()->rol === 'administrador')
+                        <a href="{{ route('admin.propiedades.index') }}" class="text-blue-600 font-bold hover:underline">
+                            Panel Admin
+                        </a>
+                    @endif
+
                     <a href="{{ route('reservas.mis_reservas') }}" class="text-gray-700 hover:text-blue-600 font-medium">Mis Reservas</a>
                     
                     <span class="text-gray-600 text-sm">Hola, <strong>{{ Auth::user()->name }}</strong></span>
-            
+
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="text-red-600 hover:underline text-sm ml-2 font-medium">
@@ -44,12 +50,10 @@
         </nav>
     </header>
 
-    <!-- Contenido Principal -->
     <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
         @yield('content')
     </main>
 
-    <!-- Footer Global -->
     <footer class="bg-gray-800 text-white py-6 text-center text-sm">
         <p>&copy; {{ date('Y') }} Stay Costa. Todos los derechos reservados.</p>
     </footer>
