@@ -1,8 +1,8 @@
 @extends('layouts.main')
 
-@section('titulo','Iniciar Sesion')
+@section('title','Iniciar Sesion')
 
-@section('name')
+@section('content')
     <div class="max-w-md mx-auto my-12 p-6 bg-white rounded-lg shadow-md border">
     <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Iniciar Sesión en Stay Costa</h2>
 

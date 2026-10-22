@@ -9,6 +9,9 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/registro', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/registro', [AuthController::class, 'register'])->name('register.post');
+
 Route::get('/', [PropiedadController::class, 'index'])->name('home');
 
 Route::get('/propiedades', function () {
@@ -26,3 +29,5 @@ Route::get('/contacto', function () {
 Route::get('/propiedades/{id}', [PropiedadController::class, 'show'])->name('propiedades.show');
 
 Route::post('/reservas', [ReservaController::class, 'store'])->name('reservas.store');
+
+Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');

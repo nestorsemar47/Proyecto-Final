@@ -49,5 +49,15 @@ class ReservaController extends Controller
 
         return redirect()->route('propiedades.show', $request->propiedad_id)
             ->with('exito', "Reserva realizada con éxito. Total a pagar: $$totalPago USD por $noches noche(s).");
-    }   
+    } 
+    
+    public function misReservas()
+    {
+    $reservas = Reserva::where('user_id', Auth::id())
+                    ->with('propiedad')
+                    ->latest()
+                    ->get();
+
+    return view('reservas.index', compact('reservas'));
+    }
 }

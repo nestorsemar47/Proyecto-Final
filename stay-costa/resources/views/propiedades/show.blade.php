@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('titulo', $propiedad->titulo)
+@section('title', $propiedad->titulo)
 
 @section('content')
 <div class="max-w-4xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
