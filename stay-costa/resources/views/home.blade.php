@@ -1,44 +1,19 @@
 @extends('layouts.main')
 
-@section('title', 'Inicio - Stay Costa')
+@section('title', 'Inicio')
 
 @section('content')
+    <!-- Componente de Banner e Interacción de Búsqueda -->
+    <x-hero-search />
 
-    @include('components.hero')
+    <!-- Grid de Propiedades -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Propiedades Destacadas</h2>
+    </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Propiedades Destacadas</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-    @foreach ($propiedades as $propiedad)
-
-        <div class="border rounded-lg overflow-hidden shadow-lg bg-white">
-            <img src="{{ $propiedad->imagen_url }}" alt="{{ $propiedad->titulo }}" class="w-full h-48 object-cover">
-            
-            <div class="p-4">
-                <h3 class="font-bold text-xl mb-2">{{ $propiedad->titulo }}</h3>
-                
-                <p class="text-gray-600 text-sm mb-2">
-                    {{ $propiedad->ubicacion }} • {{ $propiedad->habitaciones }} hab.
-                </p>
-                
-                <p class="text-gray-700 text-base mb-4">
-                    {{ $propiedad->descripcion }}
-                </p>
-
-                <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold text-green-600">
-                        ${{ $propiedad->precio_noche }} / noche
-                    </span>
-                    
-                    <a href="{{ route('propiedades.show', $propiedad) }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Ver detalles
-                    </a>
-                
-                </div>
-            </div>
-        </div>
-
-    @endforeach 
-</div>
-
+    <div id="contenedorPropiedades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ($propiedades as $propiedad)
+            <x-property-card :propiedad="$propiedad" />
+        @endforeach
+    </div>
 @endsection

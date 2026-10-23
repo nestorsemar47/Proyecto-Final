@@ -15,9 +15,7 @@ Route::post('/registro', [AuthController::class, 'register'])->name('register.po
 
 Route::get('/', [PropiedadController::class, 'index'])->name('home');
 
-Route::get('/propiedades', function () {
-    return view('propiedades');
-});
+Route::get('/propiedades', [PropiedadController::class, 'propiedadesIndex'])->name('propiedades.index');
 
 Route::get('/nosotros', function () {
     return view('nosotros');
@@ -28,6 +26,8 @@ Route::get('/contacto', function () {
 });
 
 Route::get('/propiedades/{id}', [PropiedadController::class, 'show'])->name('propiedades.show');
+
+Route::get('/buscar-propiedades', [PropiedadController::class, 'buscar'])->name('propiedades.buscar');
 
 Route::post('/reservas', [ReservaController::class, 'store'])->name('reservas.store');
 

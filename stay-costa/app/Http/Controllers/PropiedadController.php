@@ -9,9 +9,14 @@ class PropiedadController extends Controller
 {
     public function index()
     {
-        $propiedades = Propiedades::all();
-
+        $propiedades = Propiedades::latest()->take(3)->get();
         return view('home', compact('propiedades'));
+    }
+
+    public function propiedadesIndex()
+    {
+        $propiedades = Propiedades::latest()->get();
+        return view('propiedades.index', compact('propiedades'));
     }
 
     public function show(string $id)
@@ -54,5 +59,21 @@ class PropiedadController extends Controller
 
         return redirect()->route('admin.propiedades.index')
             ->with('exito', '¡La propiedad se ha publicado correctamente en la plataforma!');
+    }
+
+    public function buscar(Request $request)
+    {
+        $query = $request->input('q');
+
+        // Consultamos en MySQL buscando coincidencias parciales con LIKE
+        $propiedades = Propiedades::when($query, function ($qBuilder) use ($query) {
+                return $qBuilder->where('titulo', 'LIKE', "%{$query}%")
+                                ->orWhere('ubicacion', 'LIKE', "%{$query}%");
+            })
+            ->latest()
+            ->get();
+
+        // Retornamos los datos estructurados en formato JSON
+        return response()->json($propiedades);
     }
 }

@@ -3,59 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stay Costa - @yield('title', 'Reserva de Propiedades')</title>
-    <!-- CDN de Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-brand { font-family: 'Bebas Neue', cursive; letter-spacing: 1px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); } 50% { box-shadow: 0 0 20px rgba(74, 144, 226, 0.5); } }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-glow { animation: pulseGlow 3s infinite; }
+    </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen antialiased">
     
-    <header class="bg-white shadow-md">
-        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Logo / Marca -->
-            <a href="{{ route('home') }}" class="text-2xl font-bold text-blue-600">Stay Costa</a>
+    <!-- Componente Navbar -->
+    <x-navbar />
 
-            <!-- Enlaces Principales de Navegación -->
-            <div class="space-x-6 flex items-center">
-                <a href="/" class="text-gray-700 hover:text-blue-600 font-medium">Inicio</a>
-                <a href="/propiedades" class="text-gray-700 hover:text-blue-600 font-medium">Propiedades</a>
-                <a href="/nosotros" class="text-gray-700 hover:text-blue-600 font-medium">Nosotros</a>
-                <a href="/contacto" class="text-gray-700 hover:text-blue-600 font-medium">Contacto</a>
-
-                {{-- Opciones según estado de Autenticación --}}
-                @guest
-                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 font-medium">Iniciar Sesión</a>
-                    <a href="{{ route('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 font-medium transition duration-200">Registrarse</a>
-                @endguest
-
-                @auth
-                    @if (Auth::user()->rol === 'administrador')
-                        <a href="{{ route('admin.propiedades.index') }}" class="text-blue-600 font-bold hover:underline">
-                            Panel Admin
-                        </a>
-                    @endif
-
-                    <a href="{{ route('reservas.mis_reservas') }}" class="text-gray-700 hover:text-blue-600 font-medium">Mis Reservas</a>
-                    
-                    <span class="text-gray-600 text-sm">Hola, <strong>{{ Auth::user()->name }}</strong></span>
-
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="text-red-600 hover:underline text-sm ml-2 font-medium">
-                            Cerrar Sesión
-                        </button>
-                    </form>
-                @endauth
+    <!-- Alertas Globales -->
+    <div class="max-w-7xl mx-auto px-6 pt-4 w-full">
+        @if (session('exito'))
+            <div class="animate-fade-in bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded-r-lg shadow-sm">
+                {{ session('exito') }}
             </div>
-        </nav>
-    </header>
+        @endif
+        @if (session('error'))
+            <div class="animate-fade-in bg-rose-50 border-l-4 border-rose-500 text-rose-800 p-4 rounded-r-lg shadow-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
+    <!-- Contenido Dinámico -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full animate-fade-in">
         @yield('content')
     </main>
 
-    <footer class="bg-gray-800 text-white py-6 text-center text-sm">
-        <p>&copy; {{ date('Y') }} Stay Costa. Todos los derechos reservados.</p>
+    <!-- Footer -->
+    <footer class="bg-[#1A365D] text-gray-300 py-8 border-t border-gray-700/50 mt-auto text-sm">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="font-brand text-xl text-white tracking-wider">STAY COSTA</span>
+                <p class="text-xs text-gray-400 mt-0.5">Tu refugio frente al mar. El Salvador.</p>
+            </div>
+            <p class="text-xs text-gray-400 text-center md:text-right">&copy; {{ date('Y') }} Stay Costa.</p>
+        </div>
     </footer>
 
 </body>
