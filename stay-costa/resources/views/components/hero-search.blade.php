@@ -26,9 +26,33 @@
         const contenedor = document.getElementById('contenedorPropiedades');
         let temporizadorDebounce = null;
 
+        // El componente puede incluirse en páginas sin grid de resultados.
+        if (!inputBuscar || !btnBuscar || !contenedor) {
+            return;
+        }
+
+        /**
+         * Escapa los datos antes de insertarlos como HTML.
+         * Evita XSS almacenado si un título/ubicación contiene etiquetas.
+         */
+        function escaparHtml(valor) {
+            return String(valor ?? '').replace(/[&<>"']/g, (caracter) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+            }[caracter]));
+        }
+
         function realizarBusqueda(query = '') {
             fetch(`/buscar-propiedades?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se pudo completar la búsqueda.');
+                    }
+                    return response.json();
+                })
                 .then(propiedades => {
                     if (propiedades.length === 0) {
                         contenedor.innerHTML = `
@@ -41,15 +65,22 @@
 
                     let htmlConstruido = '';
                     propiedades.forEach(propiedad => {
+                        const id = encodeURIComponent(propiedad.id);
+                        const titulo = escaparHtml(propiedad.titulo);
+                        const ubicacion = escaparHtml(propiedad.ubicacion);
+                        const imagen = escaparHtml(propiedad.imagen_url);
+                        const precio = escaparHtml(propiedad.precio_noche);
+                        const habitaciones = escaparHtml(propiedad.habitaciones);
+
                         htmlConstruido += `
                             <div class="bg-white rounded-xl shadow-md border overflow-hidden transition transform hover:-translate-y-1">
-                                <img src="${propiedad.imagen_url}" alt="${propiedad.titulo}" class="w-full h-48 object-cover">
+                                <img src="${imagen}" alt="${titulo}" class="w-full h-48 object-cover">
                                 <div class="p-5">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-1">${propiedad.titulo}</h3>
-                                    <p class="text-gray-600 text-sm mb-3">${propiedad.ubicacion} • ${propiedad.habitaciones} hab.</p>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-1">${titulo}</h3>
+                                    <p class="text-gray-600 text-sm mb-3">${ubicacion} • ${habitaciones} hab.</p>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-green-600 font-bold text-lg">$${propiedad.precio_noche} / noche</span>
-                                        <a href="/propiedades/${propiedad.id}" class="bg-[#4A90E2] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#3b7ac8] transition">
+                                        <span class="text-green-600 font-bold text-lg">$${precio} / noche</span>
+                                        <a href="/propiedades/${id}" class="bg-[#4A90E2] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#3b7ac8] transition">
                                             Ver Detalles
                                         </a>
                                     </div>
@@ -60,20 +91,35 @@
 
                     contenedor.innerHTML = htmlConstruido;
                 })
-                .catch(error => console.error('Error al realizar la búsqueda:', error));
+                .catch(error => {
+                    console.error('Error al realizar la búsqueda:', error);
+                    contenedor.innerHTML = `
+                        <div class="col-span-full bg-rose-50 border border-rose-200 text-rose-800 p-6 rounded-xl text-center">
+                            Ocurrió un error al buscar. Intenta de nuevo.
+                        </div>
+                    `;
+                });
         }
 
         inputBuscar.addEventListener('input', (e) => {
             clearTimeout(temporizadorDebounce);
             temporizadorDebounce = setTimeout(() => {
-                realizarBusqueda(e.target.value);
+                realizarBusqueda(e.target.value.trim());
             }, 300);
         });
 
+        // El botón ahora busca el texto escrito (antes lo borraba).
         btnBuscar.addEventListener('click', () => {
             clearTimeout(temporizadorDebounce);
-            inputBuscar.value = '';
-            realizarBusqueda('');
+            realizarBusqueda(inputBuscar.value.trim());
+        });
+
+        inputBuscar.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(temporizadorDebounce);
+                realizarBusqueda(inputBuscar.value.trim());
+            }
         });
     });
 </script>

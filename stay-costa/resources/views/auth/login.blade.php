@@ -18,15 +18,7 @@
             <p class="text-xs sm:text-sm text-gray-500 mt-1">Ingresa tus credenciales para acceder a tu cuenta</p>
         </div>
 
-        <!-- Alerta de Error de Sesión Local -->
-        @if (session('error'))
-            <div class="bg-rose-50 border-l-4 border-rose-500 text-rose-800 p-3.5 mb-5 rounded-r-xl shadow-sm text-xs sm:text-sm font-medium flex items-center gap-2">
-                <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
+        <!-- El aviso de error de sesión se muestra una sola vez desde layouts.main. -->
 
         <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
             @csrf

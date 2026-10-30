@@ -31,7 +31,9 @@ Route::get('/buscar-propiedades', [PropiedadController::class, 'buscar'])->name(
 
 Route::post('/reservas', [ReservaController::class, 'store'])->name('reservas.store');
 
-Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');
+Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])
+    ->middleware('auth')
+    ->name('reservas.mis_reservas');
 
 Route::middleware(['auth', 'es_admin'])->prefix('admin')->group(function () {
 
@@ -40,4 +42,12 @@ Route::middleware(['auth', 'es_admin'])->prefix('admin')->group(function () {
     Route::get('/propiedades/crear', [PropiedadController::class, 'create'])->name('admin.propiedades.create');
 
     Route::post('/propiedades', [PropiedadController::class, 'store'])->name('admin.propiedades.store');
+
+    Route::get('/propiedades/{id}/editar', [PropiedadController::class, 'edit'])->name('admin.propiedades.edit');
+
+    Route::put('/propiedades/{id}', [PropiedadController::class, 'update'])->name('admin.propiedades.update');
+
+    Route::delete('/propiedades/{id}', [PropiedadController::class, 'destroy'])->name('admin.propiedades.destroy');
+
+    Route::patch('/propiedades/{id}/activar', [PropiedadController::class, 'activar'])->name('admin.propiedades.activar');
 });

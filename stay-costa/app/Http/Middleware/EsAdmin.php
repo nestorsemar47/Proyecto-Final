@@ -16,7 +16,7 @@ class EsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->rol !== 'administrador') {
+        if (!Auth::check() || !Auth::user()->activo || Auth::user()->rol !== 'administrador') {
             // Rebotamos al usuario a la página de inicio con un mensaje flash de error
             return redirect()->route('home')->with('error', 'No tienes permisos de administrador para acceder a esta sección.');
         }

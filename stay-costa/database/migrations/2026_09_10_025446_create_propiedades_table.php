@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('ubicacion');
             $table->integer('habitaciones');
             $table->string('imagen_url')->nullable();
+            $table->boolean('activo')->default(true);
             $table->timestamps();
 
         });

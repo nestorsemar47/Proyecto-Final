@@ -29,6 +29,7 @@ class AuthController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password), // Cifrado Bcrypt
             'rol'      => 'cliente',                       // Asignamos el rol por defecto
+            'activo'   => true,
         ]);
 
         Auth::login($user);
@@ -48,14 +49,14 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt([...$credentials, 'activo' => true])) {
             $request->session()->regenerate();
 
             return redirect()->intended('/')->with('exito', '¡Bienvenido de nuevo!');
         }
 
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden',
+            'email' => 'Las credenciales no coinciden o tu cuenta está desactivada.',
         ])->onlyInput('email');
     }
 
@@ -66,6 +67,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('Exito', 'Has cerrado sesion correctamente');
+        return redirect('/')->with('exito', 'Has cerrado sesión correctamente.');
     }
 }
