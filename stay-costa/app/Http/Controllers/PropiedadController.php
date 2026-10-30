@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Propiedades;
+use App\Models\Reserva;
 
 class PropiedadController extends Controller
 {
@@ -19,11 +20,21 @@ class PropiedadController extends Controller
         return view('propiedades.index', compact('propiedades'));
     }
 
-    public function show(string $id)
+   public function show(string $id)
     {
         $propiedad = Propiedades::findOrFail($id);
 
-        return view('propiedades.show', compact('propiedad'));
+        $fechasOcupadas = Reserva::where('propiedad_id', $id)
+            ->where('fecha_fin', '>=', now()->toDateString())
+            ->get(['fecha_inicio', 'fecha_fin'])
+            ->map(function ($reserva) {
+                return [
+                    'from' => $reserva->fecha_inicio,
+                    'to'   => $reserva->fecha_fin,
+                ];
+            });
+
+        return view('propiedades.show', compact('propiedad', 'fechasOcupadas'));
     }
 
     public function adminIndex()
